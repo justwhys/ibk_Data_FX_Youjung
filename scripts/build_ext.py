@@ -6,7 +6,7 @@
   u3: ECOS 3.1.1.1 주요국 통화의 대원화환율(일) — 원/달러, 원/위안, 원/100엔, 원/유로
   u4: 오피넷 국제유가 Dubai(일) — 0은 휴장(값 없음)으로 처리
   u5: 관세청 수출입 총괄(월, 천 달러) — 기간은 문자열 YYYY.MM로 강제
-빠진 것: 미국 정책금리(ECOS 902Y006, 월) — 받으면 u6로 추가
+  u6: ECOS 9.1.1.3 국제 주요국 중앙은행 정책금리(월) — 미국 (원출처 BIS)
 """
 import json, os, subprocess, sys, tempfile, glob
 import pandas as pd
@@ -37,7 +37,7 @@ def ecos_wide(path):
 
 def main():
     tmp = tempfile.mkdtemp()
-    f = {k: to_xlsx(glob.glob(os.path.join(RAW, k + ".xls*"))[0], tmp) for k in ["u1", "u2", "u3", "u4", "u5"]}
+    f = {k: to_xlsx(glob.glob(os.path.join(RAW, k + ".xls*"))[0], tmp) for k in ["u1", "u2", "u3", "u4", "u5", "u6"]}
 
     fx = ecos_wide(f["u3"])
     usd = fx["원/미국달러(매매기준율)"].dropna()
@@ -51,6 +51,7 @@ def main():
     kospi = stk["KOSPI지수"].dropna()
     fnet = [v for k, v in stk.items() if k.startswith("외국인 순매수")][0].dropna()
 
+    us = ecos_wide(f["u6"])["미국"].dropna()  # 열 이름이 YYYY/MM → YYYY-MM
     oil = pd.read_excel(f["u4"], sheet_name=0, header=None).iloc[7:, :2].dropna()
     oil_dates = ["20" + s[:2] + "-" + s[3:5] + "-" + s[6:8] for s in oil[0].astype(str)]
     oil_vals = pd.to_numeric(oil[1], errors="coerce").tolist()
@@ -64,7 +65,7 @@ def main():
         "환율": {"시점": dates, "원/미국달러": col("원/미국달러(매매기준율)"),
                  "원/일본엔(100엔)": col("원/일본엔(100엔)"), "원/유로": col("원/유로"), "원/위안": col("원/위안(매매기준율)")},
         "기준금리": {"시점": list(base.index), "값": [float(v) for v in base.values]},
-        "미국정책금리": None,  # 빠진 자료 — ECOS 902Y006
+        "미국정책금리": {"시점": [d[:7] for d in us.index], "값": [float(v) for v in us.values]},
         "수출입": {"기간": tr[0].tolist(), "수출 금액": [num(v) for v in tr[4]], "수입 금액": [num(v) for v in tr[7]],
                    "단위": "천 달러"},
         "두바이유": {"기간": oil_dates, "Dubai": oil_vals},
@@ -78,6 +79,7 @@ def main():
     print("유가", oil_dates[0], "~", oil_dates[-1], "| 휴장(0) 처리", sum(v is None for v in oil_vals), "일")
     print("수출입", ext["수출입"]["기간"][0], "~", ext["수출입"]["기간"][-1], len(tr), "개월 | 10월 행:",
           [p for p in ext["수출입"]["기간"] if p.endswith(".10")][-2:])
+    print("미국 정책금리", us.index[0], "~", us.index[-1], "마지막", us.values[-1])
     print("KOSPI", kospi.index[0], "~", kospi.index[-1], "| 기준금리 마지막", base.values[-1])
     print("저장:", OUT, os.path.getsize(OUT) // 1024, "KB")
 
