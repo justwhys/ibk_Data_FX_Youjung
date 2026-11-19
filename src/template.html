@@ -52,10 +52,28 @@ a, .link { color:var(--ibk); font-weight:600; cursor:pointer; text-decoration:no
 #tip .f { display:block; border-top:1px solid #3A4554; margin-top:6px; padding-top:6px; color:#C9D2DD; font-size:12.5px; }
 
 /* ① 요약 */
-#v1 { grid-template-rows:286px 1fr; gap:14px; padding-top:0; }
-.hero { display:grid; grid-template-columns:330px 1fr 1fr; }
-.hero > div { padding:20px 24px; }
-.hero > div + div { border-left:1px solid var(--line); }
+#v1 { grid-template-rows:306px 1fr; gap:14px; padding-top:0; }
+.mkt { display:grid; grid-template-columns:1.3fr 1fr; }
+.mkt > div { padding:16px 22px; }
+.mkt > div + div { border-left:1px solid var(--line); }
+.cust { display:grid; grid-template-columns:300px 1fr; }
+.cust > #h-cust { padding:20px 24px; border-right:1px solid var(--line); }
+.ch-top { display:flex; justify-content:space-between; align-items:flex-start; }
+.seg { display:inline-flex; border:1px solid #C9CFD8; border-radius:6px; overflow:hidden; }
+.seg button { border:0; background:#fff; font-size:13px; padding:5px 11px; color:var(--sub); }
+.seg button + button { border-left:1px solid #C9CFD8; }
+.seg button.on { background:var(--ibk-soft); color:var(--ibk); font-weight:600; }
+.px { font-size:30px; font-weight:700; letter-spacing:-0.03em; }
+.px small { font-size:15px; font-weight:600; margin-left:6px; }
+.up { color:#D64545; } .dn { color:#2F6FD0; }
+.chg { display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; }
+.chg span { font-size:13px; background:#F4F5F7; border-radius:4px; padding:3px 8px; color:var(--sub); }
+.chg span b { font-weight:600; }
+.stline { display:flex; align-items:center; gap:10px; }
+.stline .nm2 { font-size:22px; font-weight:700; }
+.sigs { display:flex; gap:6px; margin:8px 0 12px; flex-wrap:wrap; }
+.sigs span { font-size:12.5px; border:1px solid var(--line); border-radius:12px; padding:3px 9px; color:var(--sub); }
+.sigs span.on { border-color:#EBC77F; background:#FFF6E3; color:#8A5B06; font-weight:600; }
 .st-name { font-size:28px; font-weight:700; display:flex; align-items:center; gap:10px; }
 .lights { display:inline-flex; gap:4px; }
 .lights i { width:13px; height:13px; border-radius:50%; background:#D7DBE1; display:inline-block; }
@@ -75,11 +93,11 @@ a, .link { color:var(--ibk); font-weight:600; cursor:pointer; text-decoration:no
 .ban3 small { font-size:22px; font-weight:600; margin-left:2px; }
 .eq { font-size:14px; color:var(--sub); margin-top:12px; line-height:1.6; }
 .eq b { color:var(--text); font-size:16px; }
-.tbl { padding:16px 22px 12px; display:flex; flex-direction:column; }
+.tbl { padding:16px 22px 10px; display:flex; flex-direction:column; min-width:0; }
 .tbl-h { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; }
 table { width:100%; border-collapse:collapse; }
 th { font-size:13px; font-weight:600; color:var(--sub); text-align:left; padding:8px 10px; border-bottom:1px solid #CFD5DD; white-space:nowrap; }
-td { font-size:15px; padding:0 10px; height:56px; border-bottom:1px solid #EEF0F3; }
+td { font-size:15px; padding:0 10px; height:52px; border-bottom:1px solid #EEF0F3; }
 th.n, td.n { text-align:right; }
 tbody tr { cursor:pointer; }
 tbody tr:hover td { background:#F7FAFD; }
@@ -89,7 +107,7 @@ tr.sel td:first-child { box-shadow:inset 3px 0 0 var(--ibk); }
   align-items:center; justify-content:center; margin-right:10px; }
 .bb { display:grid; grid-template-columns:1fr 64px; align-items:center; gap:10px; }
 .bb .t { height:14px; } .bb .t i { display:block; height:100%; background:var(--burden); border-radius:2px; }
-tr.sum td { height:44px; color:var(--sub); font-size:14px; border-bottom:0; cursor:default; }
+tr.sum td { height:40px; color:var(--sub); font-size:14px; border-bottom:0; cursor:default; }
 tr.sum:hover td { background:none; }
 .tfoot { display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:8px; }
 
@@ -168,12 +186,14 @@ tr.sum:hover td { background:none; }
 
   <!-- ① 요약 -->
   <div class="view on" id="v1">
-    <div class="card hero">
-      <div id="h-status"></div>
+    <div class="card mkt">
+      <div id="h-chart"><div id="h-chart-head"></div><div id="ch-usd" style="height:186px"></div></div>
       <div id="h-prob"></div>
-      <div id="h-cust"></div>
     </div>
-    <div class="card tbl" id="t-top"></div>
+    <div class="card cust">
+      <div id="h-cust"></div>
+      <div class="tbl" id="t-top"></div>
+    </div>
   </div>
 
   <!-- ② 고객군 · 상담 -->

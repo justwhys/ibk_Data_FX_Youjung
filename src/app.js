@@ -46,6 +46,7 @@
     document.querySelectorAll(".view").forEach(function (el) { el.classList.toggle("on", el.id === v); });
     document.querySelectorAll(".cf").forEach(function (el) { el.disabled = !HAS_INT || v === "v3"; el.title = v === "v3" ? "③ 근거 탭에는 고객 필터가 적용되지 않습니다" : (HAS_INT ? "" : "가상 고객 데이터 연결 후 사용"); });
     if (v === "v3") drawCharts();
+    if (v === "v1" && S) { drawUsd(); if (charts.usd) charts.usd.resize(); }
   }
   document.addEventListener("click", function (e) { var t = e.target.closest("[data-go]"); if (t) go(t.getAttribute("data-go")); });
 
@@ -94,25 +95,36 @@
     ];
   }
 
+  function chgOf(n) { var j = S.A - n; return j >= 0 ? M.USD[S.A] / M.USD[j] - 1 : null; }
+  function chgSpan(label, x) { if (x == null) return ""; return "<span>" + label + ' <b class="' + (x >= 0 ? "up" : "dn") + '">' + (x >= 0 ? "▲" : "▼") + Math.abs(x * 100).toFixed(1) + "%</b></span>"; }
+  var RANGES = [["1개월", 21], ["3개월", 63], ["1년", 250]];
+  state.range = 1;
+
   function renderV1() {
     var on = S.S.filter(Boolean).length, lv = LEVEL[S.score];
-    $("#h-status").innerHTML =
-      '<div class="cap">변동 가능성' + '<span class="i"' + tip("켜진 경고등 개수를 그대로 옮긴 상태입니다. 환율 방향 예측이 아닙니다.", "0개 = 낮음 · 1개 = 조금 높음 · 2개 = 높음 (하루 급변과 흔들림 큼은 같은 성격이라 하나로 셉니다)") + '>i</span></div>' +
-      '<div class="st-name">' + lights(S.score) + lv + "</div>" +
-      '<div class="fine" style="margin:6px 0 12px">경고등 3개 중 ' + on + "개가 켜져 있습니다</div>" +
-      sigRows().map(function (r) { return '<div class="sg' + (r[1] ? " on" : "") + '"' + tip(r[3], r[4]) + '><span class="nm">' + r[0] + '</span><span class="val">' + (r[1] ? "켜짐 · " : "") + r[2] + "</span></div>"; }).join("") +
-      '<div class="fine" style="margin-top:10px"><span class="link" data-go="v3">다른 날과 비교 ③ ›</span></div>';
+    var lo = Math.max(0, S.A - 249), mn = Infinity, mx = -Infinity;
+    for (var j = lo; j <= S.A; j++) { mn = Math.min(mn, M.USD[j]); mx = Math.max(mx, M.USD[j]); }
+    $("#h-chart-head").innerHTML =
+      '<div class="ch-top"><div><div class="cap" style="margin-bottom:2px">원/달러 매매기준율 · ' + S.asof + '</div>' +
+      '<div class="px">' + won(S.usd) + '원<small class="' + (S.chg >= 0 ? "up" : "dn") + '">' + (S.chg >= 0 ? "▲" : "▼") + Math.abs(S.chg * 100).toFixed(2) + "% 전일 대비</small></div></div>" +
+      '<div class="seg" id="seg">' + RANGES.map(function (r, i) { return '<button data-r="' + i + '" class="' + (i === state.range ? "on" : "") + '">' + r[0] + "</button>"; }).join("") + "</div></div>" +
+      '<div class="chg">' + chgSpan("1주", chgOf(5)) + chgSpan("1개월", chgOf(21)) + chgSpan("3개월", chgOf(63)) + chgSpan("1년", chgOf(250)) +
+      '<span' + tip("최근 1년(250영업일) 원/달러 범위입니다. 수준만으로 앞으로의 방향을 말할 근거는 없습니다.", "1년 중 기준일 값 이하인 날의 비율 = " + pct(S.lvl1)) + '>1년 범위 ' + Math.round(mn).toLocaleString() + "~" + Math.round(mx).toLocaleString() + "원 · 아래에서 " + pct(S.lvl1) + "</span></div>";
+    document.querySelectorAll("#seg button").forEach(function (b) { b.onclick = function () { state.range = +b.getAttribute("data-r"); renderV1(); }; });
+    if (state.view === "v1") drawUsd();
 
     var c = S.cur, w1 = Math.round(S.won1), k = per100(c.p), a = per100(S.all.p);
     $("#h-prob").innerHTML =
-      '<div class="cap">경고등 ' + S.score + "개였던 과거 " + c.n + "번 — 1주일 뒤 원/달러가 ±1%(약 " + w1 + "원) 넘게 달라진 횟수</div>" +
-      '<div class="ban2"' + tip("과거 같은 경고등 상태였던 " + c.n + "번 중 " + c.k + "번(" + pct(c.p, 1) + ")을 100번 기준으로 바꾼 값입니다. 95% 범위 " + pct(c.ci[0]) + "~" + pct(c.ci[1]) + ".", "5영업일 간격 표본 · |ln(5영업일 뒤/오늘)| ≥ 1% · 기준일까지 결과가 확정된 표본만") + '><small>100번당</small>' + k + "번</div>" +
-      (c.n < 30 ? '<div style="margin-top:6px"><span class="warn">근거 부족: 사례 ' + c.n + "번(30번 미만)</span></div>" : "") +
-      '<div class="pair">' +
+      '<div class="stline"><span class="cap" style="margin:0">변동 가능성</span>' + lights(S.score) + '<span class="nm2"' + tip("켜진 경고등 개수를 그대로 옮긴 상태입니다. 환율 방향 예측이 아닙니다.", "0개 = 낮음 · 1개 = 조금 높음 · 2개 = 높음 (하루 급변과 흔들림 큼은 같은 성격이라 하나로 셉니다)") + ">" + lv + '</span><span class="fine">경고등 ' + on + "/3</span></div>" +
+      '<div class="sigs">' + sigRows().map(function (r) { return '<span class="' + (r[1] ? "on" : "") + '"' + tip(r[3] + " 지금: " + r[2], r[4]) + ">" + (r[1] ? "● " : "○ ") + r[0] + (r[1] && r[0] === "유가 급변" && S.oilCh != null ? " " + sg(S.oilCh, 0) : "") + "</span>"; }).join("") + "</div>" +
+      '<div class="cap" style="margin-bottom:4px">경고등 ' + S.score + "개였던 과거 " + c.n + "번 — 1주일 뒤 ±1%(약 " + w1 + "원) 넘게 달라진 횟수</div>" +
+      '<div class="ban2"' + tip("과거 같은 경고등 상태였던 " + c.n + "번 중 " + c.k + "번(" + pct(c.p, 1) + ")을 100번 기준으로 바꾼 값입니다. 95% 범위 " + pct(c.ci[0]) + "~" + pct(c.ci[1]) + ".", "5영업일 간격 표본 · |ln(5영업일 뒤/오늘)| ≥ 1% · 기준일까지 결과가 확정된 표본만") + '><small>100번당</small>' + k + "번" +
+      (c.n < 30 ? ' <span class="warn" style="vertical-align:middle">근거 부족: 사례 ' + c.n + "번</span>" : "") + "</div>" +
+      '<div class="pair" style="margin:8px 0">' +
         '<div><span>지금 상태</span><span class="t"><i style="width:' + k + '%;background:var(--ibk)"></i></span><span><b>' + k + "번</b></span></div>" +
         '<div><span>전체 평균</span><span class="t"><i style="width:' + a + '%;background:#B9C1CC"></i></span><span' + tip("기준일까지 확정된 전체 표본 " + S.all.n + "번의 평균입니다.") + ">" + a + "번 · 지금이 <b>" + S.mult.toFixed(1) + "배</b></span></div></div>" +
-      '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span class="chip">▲ 1% 넘게 오름 100번당 ' + per100(S.up) + '번</span><span class="chip">▼ 1% 넘게 내림 100번당 ' + per100(S.dn) + '번</span><span class="fine">방향은 정해지지 않았습니다</span></div>' +
-      '<div class="fine" style="margin-top:10px">2011~2019년에 정한 규칙을 2020년 이후 자료로 다시 확인했습니다 · <span class="link" data-go="v3">두 기간 검증 보기 ③ ›</span></div>';
+      '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><span class="chip">▲ 1% 넘게 오름 100번당 ' + per100(S.up) + '번</span><span class="chip">▼ 내림 100번당 ' + per100(S.dn) + '번</span><span class="fine">방향은 정해지지 않았습니다</span></div>' +
+      '<div class="fine" style="margin-top:8px"><span class="link" data-go="v3">두 기간 검증 · 다른 날과 비교 ③ ›</span></div>';
 
     var t = TEMP.total;
     $("#h-cust").innerHTML =
@@ -207,6 +219,27 @@
   }
 
   var charts = {};
+  function drawUsd() {
+    if (typeof echarts === "undefined") return;
+    var n = RANGES[state.range][1], lo = Math.max(0, S.A - n), xs = [], ys = [];
+    for (var j = lo; j <= S.A; j++) { xs.push(M.D[j]); ys.push(M.USD[j]); }
+    var el = document.getElementById("ch-usd");
+    charts.usd = charts.usd || echarts.init(el, null, { renderer: "svg" });
+    var up = ys[ys.length - 1] >= ys[0];
+    charts.usd.setOption({
+      animation: false, textStyle: { fontFamily: "Pretendard, Malgun Gothic" },
+      grid: { left: 46, right: 14, top: 12, bottom: 24 },
+      tooltip: { trigger: "axis", backgroundColor: "#1C2430", borderWidth: 0, textStyle: { color: "#fff", fontSize: 13 },
+        formatter: function (p) { return p[0].axisValue + "<br><b>" + won(p[0].value) + "원</b>"; } },
+      xAxis: { type: "category", data: xs, boundaryGap: false, axisTick: { show: false }, axisLine: { lineStyle: { color: "#CFD5DD" } },
+        axisLabel: { color: "#8A939F", fontSize: 11.5, interval: Math.floor(xs.length / 4), formatter: function (v) { return v.slice(2).replace(/-/g, "."); } } },
+      yAxis: { type: "value", scale: true, splitNumber: 3, axisLabel: { color: "#8A939F", fontSize: 11.5, formatter: function (v) { return Math.round(v).toLocaleString(); } }, splitLine: { lineStyle: { color: "#EEF0F3" } } },
+      series: [{ type: "line", data: ys, showSymbol: false, lineStyle: { color: "#0B5CAB", width: 2 },
+        areaStyle: { color: { type: "linear", x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: "rgba(11,92,171,.16)" }, { offset: 1, color: "rgba(11,92,171,0)" }] } },
+        markLine: { silent: true, symbol: "none", lineStyle: { color: "#9AA3AE", type: "dashed" }, label: { formatter: RANGES[state.range][0] + " 전", color: "#8A939F", fontSize: 11, position: "insideStartTop" }, data: [{ yAxis: ys[0] }] },
+        markPoint: { symbol: "circle", symbolSize: 9, itemStyle: { color: up ? "#D64545" : "#2F6FD0", borderColor: "#fff", borderWidth: 2 }, label: { show: false }, data: [{ coord: [xs.length - 1, ys[ys.length - 1]] }] } }]
+    }, true);
+  }
   function drawCharts() {
     if (typeof echarts === "undefined") return;
     var names = ["전체 평균"].concat(S.sig.map(function (g) { return g.name; }));
