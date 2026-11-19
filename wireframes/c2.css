@@ -1,0 +1,24 @@
+/* C-2 계열 공통 (탭 1·2·3) — common.css 위에 덮어씀 */
+body { font-size: 15px; word-break: keep-all; }
+.head { height: 78px; align-items: center; padding: 0 28px; }
+.brandline { font-size: 13px; font-weight: 600; color: var(--ibk); margin-bottom: 2px; }
+.title { font-size: 26px; font-weight: 700; }
+.title span { font-size: 15px; font-weight: 400; color: var(--sub); margin-left: 10px; letter-spacing: 0; }
+.tabs { margin-left: 18px; white-space: nowrap; }
+.tab { white-space: nowrap; }
+.filters { grid-template-columns: 150px 118px 118px 104px 118px 92px; gap: 0 8px; }
+.f label { font-size: 12px; }
+.f div { height: 30px; font-size: 13.5px; }
+.basis { height: 32px; font-size: 13px; }
+.main { height: 762px; padding: 0 20px 40px; }
+.cap { font-size: 13.5px; color: var(--sub); margin-bottom: 8px; }
+.fine { font-size: 13px; color: var(--sub); margin-top: 10px; }
+.go { color: var(--ibk); font-weight: 600; font-size: 14px; white-space: nowrap; }
+.chip { font-size: 13.5px; background: #F1F3F6; color: var(--text); border-radius: 4px; padding: 4px 9px; }
+.info { display: inline-flex; width: 16px; height: 16px; border-radius: 50%; border: 1px solid #B9C1CC; color: var(--sub);
+  font-size: 11px; align-items: center; justify-content: center; margin-left: 4px; vertical-align: 1px; font-weight: 600; }
+.h2 { font-size: 17px; font-weight: 600; color: var(--text); }
+.h2s { font-size: 13.5px; color: var(--sub); margin-top: 2px; }
+.wf { top: auto; bottom: 10px; left: auto; right: 24px; }
+.wfnote { font-size: 12px; color: #B06A00; }
+.ax { font-size: 12px; fill: #8A939F; }

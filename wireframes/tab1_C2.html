@@ -11,7 +11,8 @@ body { font-size: 15px; word-break: keep-all; }
 .brandline { font-size: 13px; font-weight: 600; color: var(--ibk); margin-bottom: 2px; }
 .title { font-size: 26px; font-weight: 700; }
 .title span { font-size: 15px; font-weight: 400; color: var(--sub); margin-left: 10px; letter-spacing: 0; }
-.tabs { margin-left: 18px; }
+.tabs { margin-left: 18px; white-space: nowrap; }
+.tab { white-space: nowrap; }
 .filters { grid-template-columns: 150px 118px 118px 104px 118px 92px; gap: 0 8px; }
 .f label { font-size: 12px; }
 .f div { height: 30px; font-size: 13.5px; }
@@ -79,9 +80,9 @@ tr.sum td b { color: var(--text); }
 <div class="wf" style="top:auto;bottom:10px;left:auto;right:24px">C-2안 · 리뷰 3건 + 볼트 디자인 총론 + Mobbin 반영 (와이어프레임)</div>
 <div class="head">
   <div>
-    <div class="brandline">IBK 환율 세이프가드</div>
-    <div class="title-row"><div class="title">요약<span>2026-11-13 기준</span></div>
-      <div class="tabs"><span class="tab on">① 요약</span><span class="tab">② 고객군 상세 · 상담 준비</span><span class="tab">③ 왜 믿을 수 있나</span></div></div>
+    <div class="brandline">IBK 환율 세이프가드 <span style="color:var(--sub);font-weight:400">· 2026-11-13 기준</span></div>
+    <div class="title-row"><div class="title">요약</div>
+      <div class="tabs"><span class="tab on">① 요약</span><span class="tab">② 고객군 · 상담</span><span class="tab">③ 근거</span></div></div>
   </div>
   <div class="filters">
     <div class="f"><label>기준일</label><div>2026-11-13 (최신)</div></div>

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>Tab3 — 왜 믿을 수 있나</title>
+<link rel="stylesheet" href="common.css"><link rel="stylesheet" href="c2.css">
+<style>
+.main { display: grid; grid-template-rows: auto 1fr auto; gap: 14px; }
+.card { padding: 18px 24px; }
+.lead { display: flex; align-items: center; gap: 28px; }
+.lead .big { font-size: 21px; font-weight: 600; line-height: 1.45; letter-spacing: -0.02em; flex: 1; }
+.lead .big em { font-style: normal; color: var(--ibk); }
+.mid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 14px; min-height: 0; }
+.right { display: grid; grid-template-rows: 1fr 1fr; gap: 14px; }
+.legend { display: flex; gap: 14px; font-size: 13px; color: var(--sub); }
+.legend i { display: inline-block; width: 11px; height: 11px; margin-right: 5px; vertical-align: -1px; border-radius: 2px; }
+#ch, #steps { width: 100%; }
+.dir { display: grid; grid-template-columns: 92px 1fr 48px; align-items: center; gap: 10px; font-size: 14px; margin-top: 10px; }
+.dir .t { height: 12px; background: #EEF1F5; border-radius: 6px; overflow: hidden; }
+.dir .t i { display: block; height: 100%; background: #8D98A6; border-radius: 6px; }
+.band { position: relative; height: 34px; margin-top: 14px; }
+.band .ln { position: absolute; top: 16px; left: 0; right: 0; height: 2px; background: #EEF1F5; }
+.band .rg { position: absolute; top: 10px; height: 14px; background: #DCE8F5; border-radius: 7px; }
+.band .md { position: absolute; top: 9px; width: 4px; height: 16px; background: var(--ibk); border-radius: 2px; }
+.band .th { position: absolute; top: 4px; width: 0; height: 26px; border-left: 1.5px dashed #9AA3AE; }
+.bandax { position: relative; height: 16px; font-size: 12px; color: var(--sub); }
+.bandax span { position: absolute; transform: translateX(-50%); }
+.layers { display: grid; grid-template-columns: 1fr 1fr 1fr 1.1fr; gap: 0; padding: 0; }
+.layers > div { padding: 14px 18px; font-size: 13.5px; line-height: 1.55; color: var(--sub); }
+.layers > div + div { border-left: 1px solid var(--line); }
+.layers b { display: block; font-size: 15px; color: var(--text); margin-bottom: 2px; }
+.layers .no b { color: var(--faint); }
+.ok { display: inline-block; font-size: 12px; font-weight: 700; color: #fff; background: var(--ibk); border-radius: 3px; padding: 1px 6px; margin-left: 4px; vertical-align: 1px; }
+.ok.g { background: #9AA3AE; }
+</style></head>
+<body>
+<div class="wf">탭 3 · 왜 믿을 수 있나 (와이어프레임 — 시장 숫자는 원천 데이터로 계산한 실제 값)</div>
+<div class="head">
+  <div>
+    <div class="brandline">IBK 환율 세이프가드 <span style="color:var(--sub);font-weight:400">· 2026-11-13 기준</span></div>
+    <div class="title-row"><div class="title">왜 믿을 수 있나</div>
+      <div class="tabs"><span class="tab">① 요약</span><span class="tab">② 고객군 · 상담</span><span class="tab on">③ 근거</span></div></div>
+  </div>
+  <div class="filters">
+    <div class="f"><label>기준일</label><div>2026-11-13 (최신)</div></div>
+    <div class="f"><label>관리부점</label><div>전체</div></div>
+    <div class="f"><label>업종</label><div>전체</div></div>
+    <div class="f"><label>결제 통화</label><div>전체</div></div>
+    <div class="f"><label>고객 유형</label><div>전체</div></div>
+    <div class="f"><label>&nbsp;</label><div class="reset">초기화</div></div>
+  </div>
+</div>
+<div class="basis">원/달러 매매기준율 2010-01-04 ~ 2026-11-13 (한국은행 ECOS) · 두바이유(오피넷) · 수출입(관세청) &nbsp;│&nbsp; 1주일 간격으로 겹치지 않게 뽑은 781번 &nbsp;│&nbsp; 기준일까지 결과가 확정된 것만 씁니다</div>
+
+<div class="main">
+  <div class="card lead">
+    <div class="big">2011~2019년 자료로 경고등 규칙을 먼저 정하고, <em>2020년 이후 자료로 다시 확인했습니다.</em> 경고등 3개는 두 기간 모두 평소보다 1주일 뒤 ±1% 넘게 달라진 경우가 많았습니다.</div>
+    <div style="text-align:right;min-width:240px"><div class="cap" style="margin:0">평소 확률만 쓸 때보다 오차</div><div style="font-size:26px;font-weight:700">0.2368 → 0.2284</div><div class="fine" style="margin-top:2px">Brier 점수 · 작지만 실제로 줄었습니다</div></div>
+  </div>
+
+  <div class="mid">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end">
+        <div><div class="h2">경고등별 — 두 기간 모두 통했나요?</div><div class="h2s">켜졌던 때 1주일 뒤 ±1% 넘게 달라진 비율 · 점선 = 그 기간의 평소</div></div>
+        <span class="legend"><span><i style="background:#B9C1CC"></i>2011~2019년 · 규칙을 정함</span><span><i style="background:var(--ibk)"></i>2020년 이후 · 다시 확인</span></span>
+      </div>
+      <svg id="ch" height="400"></svg>
+    </div>
+    <div class="right">
+      <div class="card">
+        <div class="h2">경고등이 많을수록 더 자주 크게 움직였습니다</div>
+        <div class="h2s">켜진 경고등 수별 · 두 기간 모두 계단처럼 올라갑니다</div>
+        <svg id="steps" height="170"></svg>
+      </div>
+      <div class="card">
+        <div class="h2">그래도 방향은 맞히지 못합니다</div>
+        <div class="h2s">지금과 같은 경고등 1개였던 265번 · 1주일 뒤</div>
+        <div class="dir"><span>▲ 1% 넘게 오름</span><span class="t"><i style="width:21%"></i></span><b>21%</b></div>
+        <div class="dir"><span>▼ 1% 넘게 내림</span><span class="t"><i style="width:19%"></i></span><b>19%</b></div>
+        <div class="cap" style="margin:14px 0 0">10번 중 8번은 이 범위 안이었습니다</div>
+        <div class="band"><div class="ln"></div>
+          <div class="th" style="left:25.0%"></div><div class="th" style="left:75.0%"></div><div class="rg" style="left:12.5%;width:77.5%"></div><div class="md" style="left:52.5%"></div></div>
+        <div class="bandax"><span style="left:12.5%">−1.5%</span><span style="left:25.0%;top:-1px">−1%</span><span style="left:52.5%">중간 +0.1%</span><span style="left:75.0%">+1%</span><span style="left:90.0%">+1.6%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card layers">
+    <div><b>사실 <span class="ok">계산에 씀</span></b>오늘 환율·유가가 얼마나 움직였나<br>예: 두바이유 한 달 −15%</div>
+    <div><b>과거 기록 <span class="ok">계산에 씀</span></b>지금과 비슷했던 때 실제로 어땠나<br>예: 100번 중 40번</div>
+    <div class="no"><b>이론 <span class="ok g">설명용</span></b>"금리차가 벌어지면 달러가 강해진다" 같은 설명은 계산에 쓰지 않습니다</div>
+    <div><b>참고만 하는 지표</b>한미 금리차 <span style="color:#B06A00">자료 대기</span> · 수출 전년 동월 대비 +84.0% (2026.09) · 무역수지 변화 +407억 달러 — 두 기간에서 일관되지 않아 판단에 쓰지 않습니다</div>
+  </div>
+</div>
+<script>
+// 원천 데이터로 계산한 값 (scripts/market.py, 기준일 2026-11-13). 참고 지표 중 금리차는 미국 정책금리 자료 대기 — 와이프 문서 값.
+var G = [
+  ["평소", 32.2, 444, 37.4, 337, 0],
+  ["하루 급변", 47.8, 23, 63.2, 19, 0],
+  ["흔들림 큼", 39.3, 107, 46.9, 81, 0],
+  ["유가 급변", 40.2, 97, 50.0, 100, 0],
+  ["금리차 불리", 33.5, 185, 38.7, 93, 1],
+  ["수출 감소", 32.9, 216, 42.1, 95, 1]
+];
+(function () {
+  var el = document.getElementById("ch"), W = el.clientWidth, H = 400, L = 40, B = 62, T = 14, max = 70;
+  var y = function (v) { return T + (H - T - B) * (1 - v / max); };
+  var s = "";
+  [0, 20, 40, 60].forEach(function (v) { s += '<line x1="' + L + '" x2="' + W + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="#EEF0F3"/><text class="ax" x="' + (L - 8) + '" y="' + (y(v) + 4) + '" text-anchor="end">' + v + '%</text>'; });
+  var gw = (W - L) / G.length, bw = Math.min(40, gw * 0.3);
+  // 평소 점선 (기간별)
+  s += '<line x1="' + L + '" x2="' + W + '" y1="' + y(32.2) + '" y2="' + y(32.2) + '" stroke="#9AA3AE" stroke-dasharray="4 4"/>';
+  s += '<line x1="' + L + '" x2="' + W + '" y1="' + y(37.4) + '" y2="' + y(37.4) + '" stroke="#0B5CAB" stroke-opacity=".55" stroke-dasharray="4 4"/>';
+  G.forEach(function (g, k) {
+    var cx = L + gw * k + gw / 2, ref = g[5];
+    var c1 = ref ? "#DADFE5" : "#B9C1CC", c2 = ref ? "#9DBBDD" : "#0B5CAB";
+    s += '<rect x="' + (cx - bw - 3) + '" y="' + y(g[1]) + '" width="' + bw + '" height="' + (y(0) - y(g[1])) + '" fill="' + c1 + '"/>';
+    s += '<rect x="' + (cx + 3) + '" y="' + y(g[3]) + '" width="' + bw + '" height="' + (y(0) - y(g[3])) + '" fill="' + c2 + '"/>';
+    s += '<text x="' + (cx - bw / 2 - 3) + '" y="' + (y(g[1]) - 6) + '" text-anchor="middle" font-size="12.5" fill="#6A7380">' + Math.round(g[1]) + '</text>';
+    s += '<text x="' + (cx + bw / 2 + 3) + '" y="' + (y(g[3]) - 6) + '" text-anchor="middle" font-size="12.5" font-weight="700" fill="' + (ref ? "#6A7380" : "#0B5CAB") + '">' + Math.round(g[3]) + '</text>';
+    s += '<text x="' + cx + '" y="' + (H - B + 20) + '" text-anchor="middle" font-size="14" font-weight="600" fill="' + (ref ? "#8A939F" : "#1C2430") + '">' + g[0] + '</text>';
+    s += '<text x="' + cx + '" y="' + (H - B + 38) + '" text-anchor="middle" class="ax">' + g[2] + '번 · ' + g[4] + '번</text>';
+    if (k > 0) s += '<text x="' + cx + '" y="' + (H - B + 56) + '" text-anchor="middle" font-size="12.5" font-weight="700" fill="' + (ref ? "#9AA3AE" : "#0B5CAB") + '">' + (ref ? "참고만" : "✓ 두 기간 확인") + '</text>';
+  });
+  var sx = L + gw * 4 - 2;
+  s += '<line x1="' + sx + '" x2="' + sx + '" y1="' + T + '" y2="' + (H - B + 56) + '" stroke="#D5DAE1"/>';
+  el.innerHTML = s;
+})();
+(function () {
+  var el = document.getElementById("steps"), W = el.clientWidth, H = 170, B = 34, max = 60;
+  var d = [["0개 · 평소 수준", 28.1, 29.0], ["1개 · 조금 높음", 35.8, 45.6], ["2개 · 높음", 50.0, 54.1]];
+  var y = function (v) { return 8 + (H - 8 - B) * (1 - v / max); };
+  var gw = W / 3, bw = 34, s = "";
+  d.forEach(function (g, k) {
+    var cx = gw * k + gw / 2;
+    s += '<rect x="' + (cx - bw - 3) + '" y="' + y(g[1]) + '" width="' + bw + '" height="' + (y(0) - y(g[1])) + '" fill="#B9C1CC"/>';
+    s += '<rect x="' + (cx + 3) + '" y="' + y(g[2]) + '" width="' + bw + '" height="' + (y(0) - y(g[2])) + '" fill="#0B5CAB"/>';
+    s += '<text x="' + (cx - bw / 2 - 3) + '" y="' + (y(g[1]) - 5) + '" text-anchor="middle" font-size="12.5" fill="#6A7380">' + Math.round(g[1]) + '</text>';
+    s += '<text x="' + (cx + bw / 2 + 3) + '" y="' + (y(g[2]) - 5) + '" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0B5CAB">' + Math.round(g[2]) + '</text>';
+    s += '<text x="' + cx + '" y="' + (H - 12) + '" text-anchor="middle" font-size="13.5" fill="' + (k == 1 ? "#1C2430" : "#6A7380") + '" font-weight="' + (k == 1 ? 700 : 400) + '">' + g[0] + (k == 1 ? " ◀ 지금" : "") + '</text>';
+  });
+  s += '<line x1="0" x2="' + W + '" y1="' + y(0) + '" y2="' + y(0) + '" stroke="#CFD5DD"/>';
+  el.innerHTML = s;
+})();
+</script>
+</body></html>
