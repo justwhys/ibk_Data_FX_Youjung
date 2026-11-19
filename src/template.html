@@ -15,11 +15,11 @@ a, .link { color:var(--ibk); font-weight:600; cursor:pointer; text-decoration:no
 .link:hover { text-decoration:underline; }
 
 /* 머리 영역: 제품명 + 고정 탭 | 시장 기준일 | 고객 필터 */
-.head { height:76px; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; padding:0 24px; gap:24px; }
-.prod { font-size:19px; font-weight:700; color:var(--ibk); white-space:nowrap; width:196px; }
+.head { height:76px; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; padding:0 20px; gap:16px; }
+.prod { font-size:19px; font-weight:700; color:var(--ibk); white-space:nowrap; width:190px; }
 .prod small { display:block; font-size:12px; font-weight:400; color:var(--sub); margin-top:2px; }
 .tabs { display:flex; gap:4px; }
-.tab { border:0; background:none; font-size:16px; color:var(--sub); padding:9px 16px; border-radius:7px; white-space:nowrap; }
+.tab { border:0; background:none; font-size:16px; color:var(--sub); padding:9px 13px; border-radius:7px; white-space:nowrap; }
 .tab:hover { background:#F1F4F8; }
 .tab.on { background:var(--ibk); color:#fff; font-weight:600; }
 .ctrls { margin-left:auto; display:flex; align-items:flex-end; gap:8px; }
@@ -52,11 +52,11 @@ a, .link { color:var(--ibk); font-weight:600; cursor:pointer; text-decoration:no
 #tip .f { display:block; border-top:1px solid #3A4554; margin-top:6px; padding-top:6px; color:#C9D2DD; font-size:12.5px; }
 
 /* ① 요약 */
-#v1 { grid-template-rows:306px 1fr; gap:14px; padding-top:0; }
+#v1 { grid-template-rows:322px 1fr; gap:14px; padding-top:0; }
 .mkt { display:grid; grid-template-columns:1.3fr 1fr; }
 .mkt > div { padding:16px 22px; }
 .mkt > div + div { border-left:1px solid var(--line); }
-.cust { display:grid; grid-template-columns:300px 1fr; }
+.cust { display:grid; grid-template-columns:300px 1fr; min-height:0; overflow:hidden; }
 .cust > #h-cust { padding:20px 24px; border-right:1px solid var(--line); }
 .ch-top { display:flex; justify-content:space-between; align-items:flex-start; }
 .seg { display:inline-flex; border:1px solid #C9CFD8; border-radius:6px; overflow:hidden; }
@@ -93,7 +93,7 @@ a, .link { color:var(--ibk); font-weight:600; cursor:pointer; text-decoration:no
 .ban3 small { font-size:22px; font-weight:600; margin-left:2px; }
 .eq { font-size:14px; color:var(--sub); margin-top:12px; line-height:1.6; }
 .eq b { color:var(--text); font-size:16px; }
-.tbl { padding:16px 22px 10px; display:flex; flex-direction:column; min-width:0; }
+.tbl { padding:16px 22px 10px; display:flex; flex-direction:column; min-width:0; min-height:0; height:100%; }
 .tbl-h { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; }
 table { width:100%; border-collapse:collapse; }
 th { font-size:13px; font-weight:600; color:var(--sub); text-align:left; padding:8px 10px; border-bottom:1px solid #CFD5DD; white-space:nowrap; }
@@ -109,6 +109,9 @@ tr.sel td:first-child { box-shadow:inset 3px 0 0 var(--ibk); }
 .bb .t { height:14px; } .bb .t i { display:block; height:100%; background:var(--burden); border-radius:2px; }
 tr.sum td { height:40px; color:var(--sub); font-size:14px; border-bottom:0; cursor:default; }
 tr.sum:hover td { background:none; }
+.tscroll { overflow:auto; min-height:0; flex:1 1 auto; }
+.tscroll thead th { position:sticky; top:0; background:#fff; z-index:1; }
+.typetag { font-size:12px; color:var(--sub); margin-left:6px; }
 .tfoot { display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:8px; }
 
 /* ② 고객군 · 상담 */
@@ -175,10 +178,10 @@ tr.sum:hover td { background:none; }
     <div class="ctrls">
       <div class="ctl"><label>시장 기준일</label><select id="asof"></select></div>
       <div class="sep"></div>
-      <div class="ctl"><label>관리부점</label><select class="cf" disabled><option>전체</option></select></div>
-      <div class="ctl"><label>업종</label><select class="cf" disabled><option>전체</option></select></div>
-      <div class="ctl"><label>결제 통화</label><select class="cf" disabled><option>전체</option></select></div>
-      <div class="ctl"><label>고객 유형</label><select class="cf" disabled><option>전체</option></select></div>
+      <div class="ctl"><label>관리부점</label><select class="cf" id="f-br" style="width:118px"></select></div>
+      <div class="ctl"><label>업종</label><select class="cf" id="f-ind" style="width:150px"></select></div>
+      <div class="ctl"><label>결제 통화</label><select class="cf" id="f-cur" style="width:84px"></select></div>
+      <div class="ctl"><label>고객 유형</label><select class="cf" id="f-type" style="width:118px"></select></div>
       <button class="reset" id="reset">초기화</button>
     </div>
   </div>
@@ -187,7 +190,7 @@ tr.sum:hover td { background:none; }
   <!-- ① 요약 -->
   <div class="view on" id="v1">
     <div class="card mkt">
-      <div id="h-chart"><div id="h-chart-head"></div><div id="ch-usd" style="height:186px"></div></div>
+      <div id="h-chart"><div id="h-chart-head"></div><div id="ch-usd" style="height:172px"></div><div class="legend" id="usd-legend" style="margin-top:2px"></div></div>
       <div id="h-prob"></div>
     </div>
     <div class="card cust">
@@ -224,7 +227,9 @@ tr.sum:hover td { background:none; }
   <div id="tip"></div>
 </div>
 <script>__ECHARTS__</script>
-<script>var EXT = __EXTERNAL__; var INT_RAW = __INTERNAL__; var BUILT = "__BUILT__";</script>
+<script>var EXT = __EXTERNAL__; var INT_RAW = __INTERNAL__; var BUILT = "__BUILT__";
+if (INT_RAW) Object.keys(INT_RAW).forEach(function (k) { var t = INT_RAW[k]; if (t.cols) INT_RAW[k] = t.rows.map(function (r) { var o = {}; t.cols.forEach(function (c, i) { o[c] = r[i]; }); return o; }); });</script>
 <script>__MARKET_JS__</script>
+<script>__CUSTOMER_JS__</script>
 <script>__APP_JS__</script>
 </body></html>

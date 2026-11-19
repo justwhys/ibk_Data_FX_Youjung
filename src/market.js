@@ -91,7 +91,7 @@
         cny: CUR.CNY[A]
       };
     }
-    return { D: D, N: N, USD: USD, CUR: CUR, stats: stats, idxOf: idxOf, wilson: wilson };
+    return { D: D, N: N, USD: USD, CUR: CUR, SCORE: SCORE, S1: S1, S2: S2, S3: S3, stats: stats, idxOf: idxOf, wilson: wilson };
   }
   root.MarketModel = { build: build };
 })(typeof window !== "undefined" ? window : globalThis);

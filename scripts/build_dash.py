@@ -16,6 +16,13 @@ def fonts():
     return "\n".join(css)
 
 
+def columnar(path):
+    """행내 가상 데이터(표마다 dict 목록)를 열 기반 {cols, rows}로 줄여 넣는다. 화면에서 다시 dict로 펼친다."""
+    d = json.load(open(path, encoding="utf-8"))
+    out = {k: {"cols": list(v[0].keys()), "rows": [[r[c] for c in v[0].keys()] for r in v]} for k, v in d.items()}
+    return json.dumps(out, ensure_ascii=False, separators=(",", ":"))
+
+
 def main():
     t = read(P("src", "template.html"))
     internal = P("data", "internal.json")
@@ -23,8 +30,9 @@ def main():
         "__FONTS__": fonts(),
         "__ECHARTS__": read(P("vendor", "echarts-5.5.1.min.js")).replace("</script", "<\\/script"),
         "__EXTERNAL__": read(P("data", "ext.json")),
-        "__INTERNAL__": read(internal) if os.path.exists(internal) else "null",
+        "__INTERNAL__": columnar(internal) if os.path.exists(internal) else "null",
         "__MARKET_JS__": read(P("src", "market.js")),
+        "__CUSTOMER_JS__": read(P("src", "customer.js")),
         "__APP_JS__": read(P("src", "app.js")),
         "__BUILT__": datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=9))).strftime("%Y-%m-%d %H:%M KST"),
     }
