@@ -1,0 +1,101 @@
+/* IBK 환율 세이프가드 — Tab 1 와이어프레임 공통 스타일
+   색: IBK 근사색(공식 CI 파일 받기 전). 차트 모양은 예시, 숫자는 와이프 문서 20장 기준값. */
+@font-face { font-family: "Pretendard"; font-weight: 400; src: url("fonts/Pretendard-Regular.subset.woff2") format("woff2"); }
+@font-face { font-family: "Pretendard"; font-weight: 600; src: url("fonts/Pretendard-SemiBold.subset.woff2") format("woff2"); }
+@font-face { font-family: "Pretendard"; font-weight: 700; src: url("fonts/Pretendard-Bold.subset.woff2") format("woff2"); }
+
+:root {
+  --ibk: #0B5CAB;        /* IBK 블루(근사) — 주색 */
+  --ibk-navy: #0A2F6B;   /* 머리 영역 */
+  --ibk-soft: #DCE8F5;   /* 연한 블루 면 */
+  --burden: #E8833A;     /* 부담·확인 안 됨(Tableau 주황) */
+  --burden-soft: #FBE3D1;
+  --amber: #E5A12E;      /* 조금 높음 */
+  --red: #D64545;        /* 높음 · 상승 */
+  --down: #2F6FD0;       /* 하락 */
+  --bg: #F1F3F6;
+  --card: #FFFFFF;
+  --line: #E3E6EB;
+  --text: #1C2430;
+  --sub: #6A7380;
+  --faint: #A4ACB7;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1440px; height: 900px; overflow: hidden; }
+body { font-family: "Pretendard", "Malgun Gothic", sans-serif; background: var(--bg); color: var(--text);
+  font-size: 14px; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+/* 머리 영역 — Tableau 문법: 왼쪽 제목, 오른쪽 필터 격자 */
+.head { height: 112px; background: var(--card); border-bottom: 1px solid var(--line);
+  display: flex; align-items: flex-end; justify-content: space-between; padding: 0 28px 16px; }
+.brand { color: var(--ibk); font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+.brand b { display: inline-block; background: var(--ibk); color: #fff; border-radius: 3px; padding: 1px 6px; margin-right: 6px; font-size: 11px; }
+.title-row { display: flex; align-items: baseline; gap: 22px; }
+.title { font-size: 30px; font-weight: 700; color: var(--text); letter-spacing: -0.03em; }
+.tabs { display: flex; gap: 4px; }
+.tab { font-size: 14px; color: var(--sub); padding: 6px 12px; border-radius: 6px; }
+.tab.on { background: var(--ibk-soft); color: var(--ibk); font-weight: 600; }
+.filters { display: grid; grid-template-columns: repeat(3, 150px); gap: 6px 10px; }
+.f label { display: block; font-size: 11px; color: var(--sub); margin-bottom: 2px; }
+.f div { border: 1px solid #C9CFD8; border-radius: 4px; height: 26px; padding: 0 8px; font-size: 12.5px;
+  display: flex; align-items: center; justify-content: space-between; background: #fff; }
+.f div::after { content: "▾"; color: var(--faint); font-size: 11px; }
+
+/* 기준 한 줄 */
+.basis { height: 34px; display: flex; align-items: center; gap: 14px; padding: 0 28px; font-size: 12.5px; color: var(--sub); }
+.basis strong { color: var(--text); font-weight: 600; }
+.basis .v { background: #FFF4D6; color: #7A5A00; border-radius: 3px; padding: 2px 7px; font-weight: 600; }
+
+.main { padding: 0 20px; height: 726px; }
+.foot { position: absolute; bottom: 0; left: 0; right: 0; height: 28px; display: flex; align-items: center;
+  justify-content: space-between; padding: 0 28px; font-size: 11px; color: var(--faint); }
+
+/* 카드 */
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 16px 18px; position: relative; }
+.q { font-size: 15px; font-weight: 600; color: var(--ibk); margin-bottom: 2px; }
+.qs { font-size: 12px; color: var(--sub); margin-bottom: 10px; }
+.ban { font-size: 40px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
+.ban small { font-size: 18px; font-weight: 600; color: var(--sub); margin-left: 2px; }
+.lbl { font-size: 13px; color: var(--sub); }
+.cmp { font-size: 12.5px; color: var(--sub); margin-top: 6px; }
+.cmp b { color: var(--text); }
+.more { position: absolute; right: 14px; top: 14px; font-size: 12px; color: var(--ibk); }
+
+/* 상태 */
+.status { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; border-radius: 4px; padding: 3px 9px; }
+.st-mid { background: #FDF1D8; color: #94650C; }
+.lights { display: inline-flex; gap: 3px; }
+.lights i { width: 10px; height: 10px; border-radius: 50%; background: #D7DBE1; display: inline-block; }
+.lights i.g { background: #9FB3C8; } .lights i.a { background: var(--amber); } .lights i.r { background: var(--red); }
+
+/* 경고등 줄 */
+.sig { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+.sig:first-of-type { border-top: 0; }
+.sig .dot { width: 9px; height: 9px; border-radius: 50%; background: #D7DBE1; display: inline-block; margin-right: 8px; }
+.sig.on .dot { background: var(--burden); box-shadow: 0 0 0 3px var(--burden-soft); }
+.sig .val { font-size: 12.5px; color: var(--sub); }
+.sig.on .val { color: var(--burden); font-weight: 600; }
+.tag { display: inline-block; font-size: 11px; border-radius: 3px; padding: 1px 6px; margin-right: 4px; white-space: nowrap; }
+.tag.o { background: var(--burden-soft); color: #A4501A; }
+.tag.g { background: #EEF0F3; color: var(--sub); }
+.tag.b { background: var(--ibk-soft); color: var(--ibk); }
+
+/* 표 */
+table { width: 100%; border-collapse: collapse; }
+th { font-size: 11.5px; font-weight: 600; color: var(--sub); text-align: left; padding: 6px 6px; border-bottom: 1px solid var(--line); background: #F7F8FA; }
+td { padding: 8px 6px; border-bottom: 1px solid #EEF0F3; font-size: 13px; vertical-align: middle; }
+td.n, th.n { text-align: right; }
+.rank { display: inline-flex; width: 20px; height: 20px; border-radius: 50%; background: var(--ibk); color: #fff;
+  font-size: 11px; font-weight: 700; align-items: center; justify-content: center; margin-right: 8px; }
+tr.sel td { background: #F3F8FD; }
+.bar { height: 14px; background: var(--burden); border-radius: 2px; display: inline-block; vertical-align: middle; }
+.bar.blue { background: var(--ibk); }
+.bar.grey { background: #CBD2DB; }
+.barwrap { display: flex; align-items: center; gap: 6px; font-size: 12.5px; }
+.note { font-size: 11.5px; color: var(--faint); }
+.arrow-link { font-size: 12.5px; color: var(--ibk); font-weight: 600; }
+.wf { position: absolute; top: 6px; left: 28px; background: #111; color: #fff;
+  font-size: 11px; padding: 3px 10px; border-radius: 10px; opacity: .78; z-index: 9; }
+
+.f div.reset::after { content: none; }
+.f div.reset { justify-content: center; color: var(--ibk); }

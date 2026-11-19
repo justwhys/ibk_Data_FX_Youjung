@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>Tab1 C안 — 한 문장 + 고객군 표</title>
+<link rel="stylesheet" href="common.css"><script src="common.js"></script>
+<style>
+.main { display: grid; grid-template-rows: 164px 1fr; gap: 12px; padding-bottom: 40px; }
+.hero { display: grid; grid-template-columns: 150px 1fr 470px; gap: 0; padding: 0; overflow: hidden; }
+.hero .st { background: #FDF1D8; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border-right: 1px solid var(--line); }
+.hero .st .lights i { width: 16px; height: 16px; }
+.hero .st b { font-size: 20px; color: #94650C; }
+.hero .st span { font-size: 11.5px; color: #94650C; }
+.hero .msg { padding: 18px 22px; }
+.hero .msg .big { font-size: 19px; font-weight: 600; line-height: 1.45; letter-spacing: -0.02em; }
+.hero .msg .big em { font-style: normal; color: var(--burden); font-weight: 700; }
+.hero .mkt { border-left: 1px solid var(--line); padding: 12px 16px; }
+.mrow { display: grid; grid-template-columns: 62px 74px 62px 1fr 50px; align-items: center; gap: 8px; font-size: 12.5px; height: 30px; border-bottom: 1px solid #F0F2F5; }
+.mrow:last-child { border-bottom: 0; }
+.mrow .sp { height: 22px; }
+.body { display: grid; grid-template-columns: 1fr 300px; gap: 12px; }
+.mini { height: 30px; width: 130px; }
+.kcol { display: grid; grid-template-rows: repeat(3, 1fr); gap: 12px; }
+.kcol .card { display: flex; flex-direction: column; justify-content: center; }
+.kcol .ban { font-size: 32px; }
+td { padding: 15px 6px; }
+</style></head>
+<body>
+<div class="wf">C안 · 한 문장 결론 + 고객군 표 중심 (와이어프레임)</div>
+<div class="head">
+  <div>
+    <div class="brand"><b>IBK</b>환율 세이프가드 · 환율이 크게 움직일 때, 먼저 점검할 외환 고객을 찾아 드립니다</div>
+    <div class="title-row"><div class="title">오늘 요약</div>
+      <div class="tabs"><span class="tab on">① 오늘 요약</span><span class="tab">② 고객군 상세 · 상담 준비</span><span class="tab">③ 왜 믿을 수 있나</span></div></div>
+  </div>
+  <div class="filters">
+    <div class="f"><label>기준일</label><div>2026-11-13 (최신)</div></div>
+    <div class="f"><label>관리부점</label><div>전체</div></div>
+    <div class="f"><label>업종</label><div>전체</div></div>
+    <div class="f"><label>결제 통화</label><div>전체</div></div>
+    <div class="f"><label>고객 유형</label><div>전체</div></div>
+    <div class="f"><label>&nbsp;</label><div class="reset">필터 초기화</div></div>
+  </div>
+</div>
+<div class="basis">기준 <strong>2026-11-13 매매기준율</strong>(전 영업일 거래 기준 고시값) · 원/달러 <strong>1,332.4원</strong> −0.32% <span class="v">고객 영역은 모두 가상 데이터</span> 환율 예측이나 상품 권유가 아닙니다</div>
+
+<div class="main">
+  <div class="card hero">
+    <div class="st"><span class="lights"><i class="a"></i><i></i><i></i></span><b>조금 높음</b><span>켜진 경고등 1개 / 3개</span></div>
+    <div class="msg">
+      <div class="big">과거 지금과 비슷했던 때 <em>100번 중 40번</em>은 1주일 뒤 원/달러가 ±13원(1%) 넘게 달라졌어요. 평소(34번)보다 많지만, 오를지 내릴지는 정해지지 않았어요.</div>
+      <div class="cmp" style="margin-top:8px">켜진 경고등 <span class="tag o">● 유가 급변 · 두바이유 한 달 −15%</span> <span class="tag g">하루 급변 꺼짐</span><span class="tag g">흔들림 큼 꺼짐</span> · 오름 21% · 내림 19% <span class="arrow-link" style="margin-left:8px">근거 ③ 탭 →</span></div>
+    </div>
+    <div class="mkt">
+      <div class="mrow" style="color:var(--sub);font-size:11px;height:20px"><span>통화</span><span>기준율</span><span>전일 대비</span><span>최근 3개월</span><span>오늘</span></div>
+      <div class="mrow"><b>USD</b><span>1,332.4</span><span style="color:var(--down)">▼0.32%</span><span class="sp" id="s1"></span><span>✓ 평소</span></div>
+      <div class="mrow"><b>JPY</b><span>833.45</span><span style="color:var(--down)">▼0.48%</span><span class="sp" id="s2"></span><span>✓ 평소</span></div>
+      <div class="mrow"><b>EUR</b><span>1,472.97</span><span style="color:var(--down)">▼0.71%</span><span class="sp" id="s3"></span><span>✓ 평소</span></div>
+      <div class="mrow"><b>CNY</b><span>199.98</span><span style="color:var(--down)">▼0.19%</span><span class="sp" id="s4"></span><span>✓ 평소</span></div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div class="card">
+      <div class="q">먼저 점검할 고객군 — 환율이 1% 오르면 원화 부담이 큰 순</div>
+      <div class="qs">90일 안에 결제할 수입 외화 중 당행 선물환이 확인되지 않은 금액 기준 · 행을 누르면 ② 탭에서 상담 준비</div>
+      <table>
+        <tr><th>고객군 (업종 · 유형)</th><th class="n">업체 수</th><th>90일 결제 예정</th><th>당행 선물환 확인</th><th>1% 오르면 부담 ▼</th><th>13주 결제 흐름</th><th class="n">실적 증감</th></tr>
+        <tr class="sel"><td><span class="rank">1</span>섬유제품 · 수입 결제형</td><td class="n">70</td><td><div class="barwrap"><span class="bar grey" style="width:90px"></span>1,042억</div></td><td><div class="barwrap"><span class="bar blue" style="width:3px"></span>3%</div></td><td><div class="barwrap"><span class="bar" style="width:120px"></span><b>10억</b></div></td><td><div class="mini" id="m1"></div></td><td class="n">+10%</td></tr>
+        <tr><td><span class="rank">2</span>화학물질·화학제품 · 수입 결제형</td><td class="n">62</td><td><div class="barwrap"><span class="bar grey" style="width:72px"></span>840억</div></td><td><div class="barwrap"><span class="bar blue" style="width:1px"></span>1%</div></td><td><div class="barwrap"><span class="bar" style="width:100px"></span><b>8.3억</b></div></td><td><div class="mini" id="m2"></div></td><td class="n">+7%</td></tr>
+        <tr><td><span class="rank">3</span>전자부품·컴퓨터·통신장비 · 수입 결제형</td><td class="n">99</td><td><div class="barwrap"><span class="bar grey" style="width:72px"></span>829억</div></td><td><div class="barwrap"><span class="bar blue" style="width:3px"></span>3%</div></td><td><div class="barwrap"><span class="bar" style="width:96px"></span><b>8.0억</b></div></td><td><div class="mini" id="m3"></div></td><td class="n"><span class="tag o">+20%</span></td></tr>
+        <tr><td><span class="rank">4</span>식료품 · 수입 결제형</td><td class="n">85</td><td><div class="barwrap"><span class="bar grey" style="width:72px"></span>831억</div></td><td><div class="barwrap"><span class="bar blue" style="width:11px"></span>11%</div></td><td><div class="barwrap"><span class="bar" style="width:89px"></span><b>7.4억</b></div></td><td><div class="mini" id="m4"></div></td><td class="n">+1%</td></tr>
+        <tr><td><span class="rank">5</span>도매·상품중개 · 수입 결제형</td><td class="n">71</td><td><div class="barwrap"><span class="bar grey" style="width:80px"></span>929억</div></td><td><div class="barwrap"><span class="bar blue" style="width:24px"></span>24%</div></td><td><div class="barwrap"><span class="bar" style="width:85px"></span><b>7.1억</b></div></td><td><div class="mini" id="m5"></div></td><td class="n">+7%</td></tr>
+      </table>
+      <div style="display:flex;justify-content:space-between;margin-top:12px">
+        <span class="note">당행 거래 기준 추정이며 실제 환노출이 아닙니다 · 타행 헤지는 알 수 없어 "확인 안 됨"으로 씁니다 · 5곳 미만 고객군은 숨김</span>
+        <span class="arrow-link">나머지 23개 고객군 보기 →</span></div>
+    </div>
+    <div class="kcol">
+      <div class="card"><div class="lbl">90일 안에 결제할 수입 외화</div><div class="ban">5,684억</div><div class="cmp">결제 예정 업체 376개사</div></div>
+      <div class="card"><div class="lbl">그중 당행 선물환 확인</div><div class="ban">9%</div><div class="cmp">나머지 91%는 확인 안 됨</div></div>
+      <div class="card" style="border-color:var(--burden)"><div class="lbl">환율 1%(약 13원) 오르면 늘어나는 부담</div><div class="ban" style="color:var(--burden)">52억</div><div class="cmp">업체당 평균 약 1,379만 원</div></div>
+    </div>
+  </div>
+</div>
+<div class="foot"><span>IBK 환율 세이프가드 · 행내 업무 참고용 · 고객 값은 가상</span><span>와이어프레임 — 차트 모양은 예시, 숫자는 11/19 문서 기준값</span></div>
+<script>
+[["s1",1360,1332.4],["s2",850,833.45],["s3",1500,1472.97],["s4",203,199.98]].forEach(function (a, i) {
+  line(document.getElementById(a[0]), series(60, 11 + i, a[1], a[2], a[1] * 0.006), { sw: 1.3, endDot: true, dotColor: "#0B5CAB" }); });
+for (var k = 1; k <= 5; k++) { var r = rng(k * 5), d = []; for (var i = 0; i < 13; i++) d.push([10 + r() * 30, r() * 4]); cols(document.getElementById("m" + k), d, { gap: 2 }); }
+</script>
+</body></html>

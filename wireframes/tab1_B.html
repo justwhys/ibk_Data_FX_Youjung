@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>Tab1 B안 — 시장 → 고객 흐름</title>
+<link rel="stylesheet" href="common.css"><script src="common.js"></script>
+<style>
+.main { display: grid; grid-template-columns: 560px 34px 1fr; gap: 0; padding-bottom: 40px; }
+.flow { display: flex; align-items: center; justify-content: center; color: var(--ibk); font-size: 22px; font-weight: 700; }
+.side-h { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.side-h .k { font-size: 12px; font-weight: 700; color: #fff; background: var(--ibk-navy); border-radius: 3px; padding: 2px 8px; }
+.dots { display: grid; gap: 5px; width: 330px; }
+.dots i { width: 12px; height: 12px; border-radius: 50%; display: block; }
+.mk { display: flex; gap: 22px; align-items: center; }
+.split { display: flex; height: 22px; border-radius: 3px; overflow: hidden; font-size: 11.5px; color: #fff; font-weight: 600; margin-top: 6px; }
+.split span { display: flex; align-items: center; justify-content: center; }
+.chips { display: flex; gap: 6px; margin-top: 8px; }
+.chip { font-size: 12.5px; border: 1px solid var(--line); border-radius: 14px; padding: 4px 10px; color: var(--sub); }
+.chip.on { border-color: var(--burden); color: #A4501A; background: var(--burden-soft); font-weight: 600; }
+#usd { height: 170px; }
+.kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.kpi { border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; }
+.kpi .ban { font-size: 28px; }
+.kpi .ban small { font-size: 14px; }
+.hb { display: grid; grid-template-columns: 170px 1fr 54px; align-items: center; gap: 8px; padding: 8px 0; font-size: 13px; border-bottom: 1px solid #EEF0F3; }
+#cal { height: 150px; margin-top: 8px; }
+.xax { display: flex; justify-content: space-between; font-size: 11px; color: var(--faint); margin-top: 4px; }
+.legend { display: flex; gap: 12px; font-size: 11.5px; color: var(--sub); }
+.legend i { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; }
+</style></head>
+<body>
+<div class="wf">B안 · 왼쪽 시장 → 오른쪽 고객 (와이어프레임)</div>
+<div class="head">
+  <div>
+    <div class="brand"><b>IBK</b>환율 세이프가드 · 환율이 크게 움직일 때, 먼저 점검할 외환 고객을 찾아 드립니다</div>
+    <div class="title-row"><div class="title">오늘 요약</div>
+      <div class="tabs"><span class="tab on">① 오늘 요약</span><span class="tab">② 고객군 상세 · 상담 준비</span><span class="tab">③ 왜 믿을 수 있나</span></div></div>
+  </div>
+  <div class="filters">
+    <div class="f"><label>기준일</label><div>2026-11-13 (최신)</div></div>
+    <div class="f"><label>관리부점</label><div>전체</div></div>
+    <div class="f"><label>업종</label><div>전체</div></div>
+    <div class="f"><label>결제 통화</label><div>전체</div></div>
+    <div class="f"><label>고객 유형</label><div>전체</div></div>
+    <div class="f"><label>&nbsp;</label><div class="reset">필터 초기화</div></div>
+  </div>
+</div>
+<div class="basis">기준 <strong>2026-11-13 매매기준율</strong>(전 영업일 거래 기준 고시값) · 원/달러 <strong>1,332.4원</strong> −0.32% <span class="v">고객 영역은 모두 가상 데이터</span> 환율 예측이나 상품 권유가 아닙니다</div>
+
+<div class="main">
+  <div class="card">
+    <div class="side-h"><span class="k">시장</span><span class="status st-mid"><span class="lights"><i class="a"></i><i></i><i></i></span>조금 높음</span></div>
+    <div class="q">1주일 뒤 환율이 크게 달라질 가능성은?</div>
+    <div class="qs">과거 지금과 비슷했던 265번 중, 1주일 뒤 ±1%(약 13원) 넘게 달라진 경우</div>
+    <div class="mk">
+      <div class="dots" id="dots"></div>
+      <div><div class="ban">40번</div><div class="lbl">100번 중</div><div class="cmp">평소 34번 · <b>1.2배</b></div></div>
+    </div>
+    <div class="cmp" style="margin-top:14px">크게 움직인 40번의 방향 — <b>정해지지 않았어요</b></div>
+    <div class="split"><span style="width:52.5%;background:var(--red)">▲ 오름 21%</span><span style="width:47.5%;background:var(--down)">▼ 내림 19%</span></div>
+    <div class="q" style="margin-top:18px;font-size:14px">왜 그렇게 보나요? — 켜진 경고등</div>
+    <div class="chips"><span class="chip">하루 급변</span><span class="chip">흔들림 큼</span><span class="chip on">● 유가 급변 −15%</span></div>
+    <div class="cmp" style="margin-top:14px">원/달러 최근 1년 · <b>하위 3%</b>(낮은 편)</div>
+    <div id="usd"></div>
+    <div class="arrow-link" style="margin-top:4px">이 경고등은 믿을 만한가요? ③ 탭 →</div>
+  </div>
+
+  <div class="flow">→</div>
+
+  <div class="card">
+    <div class="side-h"><span class="k">우리 고객</span><span class="note">모두 가상 데이터 · 기준일 2026-11-13</span></div>
+    <div class="q">그래서, 누구부터 점검할까요?</div>
+    <div class="qs">90일 안에 결제할 수입 외화 중 당행 선물환이 확인되지 않은 금액 기준</div>
+    <div class="kpis">
+      <div class="kpi"><div class="lbl">90일 안에 결제할 수입 외화</div><div class="ban">5,684억</div><div class="cmp">결제 예정 업체 376개사</div></div>
+      <div class="kpi"><div class="lbl">그중 당행 선물환 확인</div><div class="ban">9%</div><div class="cmp">나머지 91%는 확인 안 됨</div></div>
+      <div class="kpi" style="border-color:var(--burden)"><div class="lbl">1%(약 13원) 오르면 늘어나는 부담</div><div class="ban" style="color:var(--burden)">52억</div><div class="cmp">업체당 평균 약 1,379만 원</div></div>
+    </div>
+    <div class="q" style="margin-top:16px;font-size:14px">먼저 점검할 고객군 TOP 5 <span class="note" style="font-weight:400">· 모두 수입 결제형 · 누르면 ② 탭</span></div>
+    <div class="hb"><span><span class="rank">1</span>섬유제품</span><span class="bar" style="width:100%"></span><b>10억</b></div>
+    <div class="hb"><span><span class="rank">2</span>화학물질·화학제품</span><span class="bar" style="width:83%"></span><b>8.3억</b></div>
+    <div class="hb"><span><span class="rank">3</span>전자부품·통신장비</span><span class="bar" style="width:80%"></span><b>8.0억</b></div>
+    <div class="hb"><span><span class="rank">4</span>식료품</span><span class="bar" style="width:74%"></span><b>7.4억</b></div>
+    <div class="hb"><span><span class="rank">5</span>도매·상품중개</span><span class="bar" style="width:71%"></span><b>7.1억</b></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px">
+      <span class="q" style="font-size:14px">앞으로 13주, 주마다 돌아오는 수입 결제</span>
+      <span class="legend"><span><i style="background:var(--burden)"></i>당행 선물환 확인 안 됨</span><span><i style="background:#CBD2DB"></i>확인됨</span></span></div>
+    <div id="cal"></div><div class="xax"><span>11/14 주</span><span>12/12 주</span><span>1/9 주</span><span>2/6 주</span></div>
+  </div>
+</div>
+<div class="foot"><span>IBK 환율 세이프가드 · 행내 업무 참고용 · 고객 값은 가상</span><span>와이어프레임 — 차트 모양은 예시, 숫자는 11/19 문서 기준값</span></div>
+<script>
+dots(document.getElementById("dots"), 40, 100, 20);
+line(document.getElementById("usd"), series(250, 7, 1395, 1332.4, 14), { area: true, endDot: true });
+var r = rng(3), d = []; for (var i = 0; i < 13; i++) d.push([30 + r() * 40, 2 + r() * 6]);
+cols(document.getElementById("cal"), d, { gap: 6 });
+</script>
+</body></html>
