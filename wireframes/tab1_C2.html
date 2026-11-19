@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>Tab1 C-2안 — 결론 + 고객군 표 (리뷰 반영)</title>
+<link rel="stylesheet" href="common.css">
+<style>
+/* C-2: 세 모델 리뷰 + 볼트 디자인 총론 + Mobbin 레퍼런스 반영
+   - 포인트 컬러 하나(주황) = "부담"에만. 상태(노랑)는 상태 블록 안에만. 빨강·방향색 없음
+   - 무게 한 곳 = 52억. 위계는 크기로, 큰 숫자는 굵기 하나
+   - 최소 글자 13px, 말투는 "합니다"체로 통일 */
+body { font-size: 15px; word-break: keep-all; }
+.head { height: 78px; align-items: center; padding: 0 28px; }
+.brandline { font-size: 13px; font-weight: 600; color: var(--ibk); margin-bottom: 2px; }
+.title { font-size: 26px; font-weight: 700; }
+.title span { font-size: 15px; font-weight: 400; color: var(--sub); margin-left: 10px; letter-spacing: 0; }
+.tabs { margin-left: 18px; }
+.filters { grid-template-columns: 150px 118px 118px 104px 118px 92px; gap: 0 8px; }
+.f label { font-size: 12px; }
+.f div { height: 30px; font-size: 13.5px; }
+.basis { height: 32px; font-size: 13px; }
+.main { height: 762px; padding: 0 20px 40px; display: grid; grid-template-rows: 268px 1fr; gap: 14px; }
+
+.hero { display: grid; grid-template-columns: 300px 1fr 1fr; padding: 0; overflow: visible; z-index: 3; }
+.hero > div { padding: 20px 24px; }
+.hero > div + div { border-left: 1px solid var(--line); }
+.cap { font-size: 13.5px; color: var(--sub); margin-bottom: 8px; }
+
+/* 상태 블록 — Customer.io의 상태 카드 패턴 */
+.stat { background: #FFF8EA; border-radius: 6px 0 0 6px; }
+.stat .big { display: flex; align-items: center; gap: 10px; font-size: 26px; font-weight: 700; color: #8A5B06; }
+.stat .lights i { width: 14px; height: 14px; }
+.stat .sub { font-size: 13.5px; color: #8A5B06; margin: 4px 0 14px; }
+.sg { display: flex; justify-content: space-between; font-size: 14px; padding: 7px 0; border-top: 1px solid #F1E3C4; }
+.sg .off { color: var(--faint); }
+.sg.on b { color: #8A5B06; }
+
+/* 가능성 */
+.ban2 { font-size: 40px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; }
+.ban2 small { font-size: 18px; font-weight: 400; color: var(--sub); margin-right: 4px; }
+.pair { margin: 12px 0 10px; }
+.pair div { display: grid; grid-template-columns: 44px 1fr 120px; align-items: center; gap: 10px; font-size: 13.5px; margin-top: 6px; }
+.pair .t { height: 10px; background: #EEF1F5; border-radius: 5px; overflow: hidden; }
+.pair .t i { display: block; height: 100%; border-radius: 5px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.chip { font-size: 13.5px; background: #F1F3F6; color: var(--text); border-radius: 4px; padding: 4px 9px; }
+.fine { font-size: 13px; color: var(--sub); margin-top: 10px; }
+
+/* 핵심 숫자 — 화면에서 가장 무거운 것 */
+.ban3 { font-size: 56px; font-weight: 700; color: var(--burden); letter-spacing: -0.04em; line-height: 1.05; }
+.ban3 small { font-size: 22px; font-weight: 600; margin-left: 2px; }
+.eq { display: flex; align-items: baseline; gap: 8px; font-size: 14px; color: var(--sub); margin-top: 12px; flex-wrap: wrap; }
+.eq b { color: var(--text); font-size: 17px; }
+.info { display: inline-flex; width: 16px; height: 16px; border-radius: 50%; border: 1px solid #B9C1CC; color: var(--sub);
+  font-size: 11px; align-items: center; justify-content: center; margin-left: 4px; vertical-align: 1px; font-weight: 600; }
+.tip { position: absolute; right: 22px; top: 196px; width: 380px; background: #1C2430; color: #fff; border-radius: 6px;
+  padding: 12px 14px; font-size: 13px; line-height: 1.5; box-shadow: 0 6px 20px rgba(0,0,0,.18); z-index: 5; }
+.tip b { color: #FFD3B0; }
+.tip hr { border: 0; border-top: 1px solid #3A4554; margin: 8px 0; }
+.tip:before { content: "ⓘ에 마우스를 올리면"; position: absolute; top: -20px; right: 0; font-size: 11.5px; color: #B06A00; }
+
+/* 표 — Origin·Fey 패턴: 단색 막대, 값 오른쪽 정렬, 선택 행 테두리 */
+.tbl { padding: 18px 22px 14px; }
+.th { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 10px; }
+.th .q { font-size: 17px; color: var(--text); }
+.th .qs { margin: 2px 0 0; font-size: 13.5px; }
+table th { font-size: 13px; padding: 8px 10px; background: none; border-bottom: 1px solid #CFD5DD; color: var(--sub); }
+table td { font-size: 15px; padding: 0 10px; height: 60px; border-bottom: 1px solid #EEF0F3; }
+tr.sel td { background: #F4F8FD; }
+tr.sel td:first-child { box-shadow: inset 3px 0 0 var(--ibk); }
+.bb { display: grid; grid-template-columns: 1fr 64px; align-items: center; gap: 10px; }
+.bb .t { height: 14px; }
+.bb .t i { display: block; height: 100%; background: var(--burden); border-radius: 2px; }
+.go { color: var(--ibk); font-weight: 600; font-size: 14px; white-space: nowrap; }
+tr.sum td { height: 44px; color: var(--sub); font-size: 14px; border-bottom: 0; }
+tr.sum td b { color: var(--text); }
+.tfoot { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+.tfoot .note { font-size: 13px; color: var(--sub); }
+.wfnote { font-size: 12px; color: #B06A00; }
+</style></head>
+<body>
+<div class="wf" style="top:auto;bottom:10px;left:auto;right:24px">C-2안 · 리뷰 3건 + 볼트 디자인 총론 + Mobbin 반영 (와이어프레임)</div>
+<div class="head">
+  <div>
+    <div class="brandline">IBK 환율 세이프가드</div>
+    <div class="title-row"><div class="title">요약<span>2026-11-13 기준</span></div>
+      <div class="tabs"><span class="tab on">① 요약</span><span class="tab">② 고객군 상세 · 상담 준비</span><span class="tab">③ 왜 믿을 수 있나</span></div></div>
+  </div>
+  <div class="filters">
+    <div class="f"><label>기준일</label><div>2026-11-13 (최신)</div></div>
+    <div class="f"><label>관리부점</label><div>전체</div></div>
+    <div class="f"><label>업종</label><div>전체</div></div>
+    <div class="f"><label>결제 통화</label><div>전체</div></div>
+    <div class="f"><label>고객 유형</label><div>전체</div></div>
+    <div class="f"><label>&nbsp;</label><div class="reset">초기화</div></div>
+  </div>
+</div>
+<div class="basis">시장: <strong>2026-11-13 매매기준율</strong>(전 영업일 거래 기준 고시값) · 원/달러 <strong>1,332.4원</strong> &nbsp;│&nbsp; 고객: <span class="v">모두 가상 데이터</span> &nbsp;│&nbsp; 환율 예측이나 상품 권유가 아닙니다 &nbsp;│&nbsp; 필터는 고객 영역에만 적용됩니다</div>
+
+<div class="main">
+  <div class="card hero">
+    <!-- 1. 상태 -->
+    <div class="stat">
+      <div class="cap" style="color:#8A5B06">지금 상태</div>
+      <div class="big"><span class="lights"><i class="a"></i><i></i><i></i></span>조금 높음</div>
+      <div class="sub">경고등 3개 중 1개가 켜져 있습니다</div>
+      <div class="sg"><span>하루 급변</span><span class="off">꺼짐</span></div>
+      <div class="sg"><span>흔들림 큼 (최근 20일)</span><span class="off">꺼짐</span></div>
+      <div class="sg on"><span>유가 급변</span><b>켜짐 · 두바이유 한 달 −15%</b></div>
+    </div>
+
+    <!-- 2. 가능성 -->
+    <div>
+      <div class="cap">1주일 뒤 원/달러가 ±1%(약 13원) 넘게 달라질 가능성</div>
+      <div class="ban2"><small>100번 중</small>40번</div>
+      <div class="pair">
+        <div><span>지금</span><span class="t"><i style="width:40%;background:var(--ibk)"></i></span><span><b>40번</b></span></div>
+        <div><span>평소</span><span class="t"><i style="width:34%;background:#B9C1CC"></i></span><span>34번 · 지금이 <b>1.2배</b></span></div>
+      </div>
+      <div class="chips"><span class="chip">▲ 1% 넘게 오름 21%</span><span class="chip">▼ 1% 넘게 내림 19%</span><span style="font-size:13.5px;color:var(--sub)">방향은 정해지지 않았습니다</span></div>
+      <div class="fine">경고등이 1개 켜졌던 과거 265번을 100번으로 환산 · <span class="go">근거 보기 ③ ›</span></div>
+    </div>
+
+    <!-- 3. 핵심 숫자 (가장 무거운 것) -->
+    <div style="position:relative">
+      <div class="cap">환율이 1% 오르면 늘어나는 원화 부담 <span class="info">i</span></div>
+      <div class="ban3">52억<small>원</small></div>
+      <div class="eq"><span>90일 안에 결제할 수입 외화</span><b>5,684억</b><span>중 당행 선물환 확인 안 됨</span><b>91%</b></div>
+      <div class="fine">결제 예정 업체 376곳 · 업체당 평균 약 1,379만 원</div>
+      <div class="tip"><b>산식</b> 기업·통화별 max(90일 결제 예정 − 당행 선물환, 0) × 기준일 환율 × 1%를 고객군별로 합산합니다. 기업끼리, 통화끼리 서로 빼지 않습니다.<hr>통화마다 그 통화의 원화 환율이 1% 오를 때 기준입니다. 당행 거래 기준 추정이며 실제 환노출이 아닙니다.</div>
+    </div>
+  </div>
+
+  <div class="card tbl">
+    <div class="th">
+      <div><div class="q">먼저 점검할 고객군</div>
+        <div class="qs">1% 오르면 늘어나는 부담이 큰 순 · 행을 누르면 ② 탭에서 이 고객군의 상담 준비가 열립니다</div></div>
+      <span class="go">전체 28개 고객군 보기 ›</span>
+    </div>
+    <table>
+      <tr><th>고객군 (업종 · 5개 모두 수입 결제형)</th><th class="n">업체 수 <span class="info">i</span></th><th class="n">90일 결제 예정</th><th class="n">당행 선물환 확인</th><th style="width:330px">1% 오르면 늘어나는 부담 ▼</th><th style="width:110px"></th></tr>
+      <tr class="sel"><td><span class="rank">1</span>섬유제품</td><td class="n">70곳</td><td class="n">1,042억</td><td class="n">3%</td><td><div class="bb"><span class="t"><i style="width:100%"></i></span><b>10억</b></div></td><td class="go">상담 준비 ›</td></tr>
+      <tr><td><span class="rank">2</span>화학물질·화학제품</td><td class="n">62곳</td><td class="n">840억</td><td class="n">1%</td><td><div class="bb"><span class="t"><i style="width:83%"></i></span><b>8.3억</b></div></td><td class="go">상담 준비 ›</td></tr>
+      <tr><td><span class="rank">3</span>전자부품·컴퓨터·통신장비</td><td class="n">99곳</td><td class="n">829억</td><td class="n">3%</td><td><div class="bb"><span class="t"><i style="width:80%"></i></span><b>8.0억</b></div></td><td class="go">상담 준비 ›</td></tr>
+      <tr><td><span class="rank">4</span>식료품</td><td class="n">85곳</td><td class="n">831억</td><td class="n">11%</td><td><div class="bb"><span class="t"><i style="width:74%"></i></span><b>7.4억</b></div></td><td class="go">상담 준비 ›</td></tr>
+      <tr><td><span class="rank">5</span>도매·상품중개</td><td class="n">71곳</td><td class="n">929억</td><td class="n">24%</td><td><div class="bb"><span class="t"><i style="width:71%"></i></span><b>7.1억</b></div></td><td class="go">상담 준비 ›</td></tr>
+      <tr class="sum"><td>위 5개 합계</td><td></td><td></td><td></td><td><b>41억</b> · 전체 52억의 약 79%</td><td></td></tr>
+    </table>
+    <div class="tfoot">
+      <span class="note">업체 수는 고객군 전체이며 90일 안에 결제가 없는 곳도 포함합니다 · 타행 헤지는 알 수 없어 "확인 안 됨"으로 씁니다 · 5곳 미만 고객군은 숨깁니다</span>
+      <span class="wfnote">와이어프레임: 숫자는 11/19 문서 기준값, 툴팁은 마우스를 올린 상태 예시</span>
+    </div>
+  </div>
+</div>
+</body></html>
