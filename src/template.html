@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=1440">
+<title>IBK 환율 세이프가드</title>
+<style>
+__FONTS__
+:root { --ibk:#0B5CAB; --ibk-soft:#E6EFF9; --burden:#E8833A; --burden-soft:#FBE3D1; --amber:#E5A12E; --bg:#F1F3F6; --card:#fff;
+  --line:#E3E6EB; --text:#1C2430; --sub:#5F6875; --faint:#9AA3AE; }
+* { box-sizing:border-box; margin:0; padding:0; }
+html, body { background:var(--bg); }
+body { font-family:"Pretendard","Malgun Gothic",sans-serif; color:var(--text); font-size:15px; font-variant-numeric:tabular-nums;
+  letter-spacing:-0.01em; word-break:keep-all; min-width:1440px; }
+#app { width:1440px; height:900px; margin:0 auto; position:relative; overflow:hidden; background:var(--bg); }
+button { font:inherit; cursor:pointer; }
+a, .link { color:var(--ibk); font-weight:600; cursor:pointer; text-decoration:none; white-space:nowrap; }
+.link:hover { text-decoration:underline; }
+
+/* 머리 영역: 제품명 + 고정 탭 | 시장 기준일 | 고객 필터 */
+.head { height:76px; background:#fff; border-bottom:1px solid var(--line); display:flex; align-items:center; padding:0 24px; gap:24px; }
+.prod { font-size:19px; font-weight:700; color:var(--ibk); white-space:nowrap; width:196px; }
+.prod small { display:block; font-size:12px; font-weight:400; color:var(--sub); margin-top:2px; }
+.tabs { display:flex; gap:4px; }
+.tab { border:0; background:none; font-size:16px; color:var(--sub); padding:9px 16px; border-radius:7px; white-space:nowrap; }
+.tab:hover { background:#F1F4F8; }
+.tab.on { background:var(--ibk); color:#fff; font-weight:600; }
+.ctrls { margin-left:auto; display:flex; align-items:flex-end; gap:8px; }
+.ctl label { display:block; font-size:12px; color:var(--sub); margin-bottom:3px; }
+.ctl select { height:32px; border:1px solid #C9CFD8; border-radius:5px; padding:0 8px; font:inherit; font-size:13.5px; background:#fff; color:var(--text); }
+.ctl select:disabled { background:#F4F5F7; color:var(--faint); }
+.sep { width:1px; height:40px; background:var(--line); margin:0 6px; }
+.reset { height:32px; border:1px solid #C9CFD8; border-radius:5px; background:#fff; color:var(--ibk); padding:0 12px; font-size:13.5px; }
+.basis { height:32px; display:flex; align-items:center; gap:10px; padding:0 24px; font-size:13px; color:var(--sub); white-space:nowrap; }
+.basis b { color:var(--text); font-weight:600; }
+.basis .v { background:#FFF4D6; color:#7A5A00; border-radius:3px; padding:2px 7px; font-weight:600; }
+.basis.past { background:#FFF4D6; color:#7A5A00; }
+.bar-sep { color:#C3C9D1; }
+
+.view { display:none; height:792px; padding:0 20px 20px; }
+.view.on { display:grid; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:7px; position:relative; }
+.cap { font-size:13.5px; color:var(--sub); margin-bottom:8px; }
+.fine { font-size:13px; color:var(--sub); }
+.h2 { font-size:17px; font-weight:600; }
+.h2s { font-size:13.5px; color:var(--sub); margin-top:2px; }
+.chip { display:inline-block; font-size:13.5px; background:#F1F3F6; border-radius:4px; padding:4px 9px; }
+.temp { display:inline-block; font-size:12px; font-weight:600; color:#8A5B06; background:#FFF4D6; border-radius:3px; padding:2px 7px; }
+.warn { display:inline-block; font-size:12.5px; font-weight:600; color:#8A5B06; background:#FFF4D6; border-radius:3px; padding:2px 7px; }
+[data-tip] { cursor:help; }
+.i { display:inline-flex; width:16px; height:16px; border-radius:50%; border:1px solid #B9C1CC; color:var(--sub); font-size:11px; font-weight:600;
+  align-items:center; justify-content:center; margin-left:4px; vertical-align:1px; cursor:help; }
+#tip { position:fixed; z-index:99; max-width:360px; background:#1C2430; color:#fff; border-radius:6px; padding:10px 13px; font-size:13px; line-height:1.55;
+  pointer-events:none; display:none; box-shadow:0 6px 20px rgba(0,0,0,.18); }
+#tip .f { display:block; border-top:1px solid #3A4554; margin-top:6px; padding-top:6px; color:#C9D2DD; font-size:12.5px; }
+
+/* ① 요약 */
+#v1 { grid-template-rows:286px 1fr; gap:14px; padding-top:0; }
+.hero { display:grid; grid-template-columns:330px 1fr 1fr; }
+.hero > div { padding:20px 24px; }
+.hero > div + div { border-left:1px solid var(--line); }
+.st-name { font-size:28px; font-weight:700; display:flex; align-items:center; gap:10px; }
+.lights { display:inline-flex; gap:4px; }
+.lights i { width:13px; height:13px; border-radius:50%; background:#D7DBE1; display:inline-block; }
+.lights i.on { background:var(--amber); }
+.sg { display:grid; grid-template-columns:1fr auto; align-items:center; padding:8px 0; border-top:1px solid var(--line); font-size:14px; gap:8px; }
+.sg .val { font-size:13px; color:var(--sub); text-align:right; }
+.sg.on .nm::before { content:"● "; color:var(--amber); }
+.sg .nm::before { content:"○ "; color:#C3C9D1; }
+.sg.on .val { color:#8A5B06; font-weight:600; }
+.ban2 { font-size:42px; font-weight:700; letter-spacing:-0.03em; line-height:1.1; }
+.ban2 small { font-size:18px; font-weight:400; color:var(--sub); margin-right:4px; }
+.pair { margin:12px 0 10px; }
+.pair div { display:grid; grid-template-columns:62px 1fr 150px; align-items:center; gap:10px; font-size:13.5px; margin-top:6px; }
+.pair .t { height:10px; background:#EEF1F5; border-radius:5px; overflow:hidden; }
+.pair .t i { display:block; height:100%; border-radius:5px; }
+.ban3 { font-size:56px; font-weight:700; color:var(--burden); letter-spacing:-0.04em; line-height:1.05; }
+.ban3 small { font-size:22px; font-weight:600; margin-left:2px; }
+.eq { font-size:14px; color:var(--sub); margin-top:12px; line-height:1.6; }
+.eq b { color:var(--text); font-size:16px; }
+.tbl { padding:16px 22px 12px; display:flex; flex-direction:column; }
+.tbl-h { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:8px; }
+table { width:100%; border-collapse:collapse; }
+th { font-size:13px; font-weight:600; color:var(--sub); text-align:left; padding:8px 10px; border-bottom:1px solid #CFD5DD; white-space:nowrap; }
+td { font-size:15px; padding:0 10px; height:56px; border-bottom:1px solid #EEF0F3; }
+th.n, td.n { text-align:right; }
+tbody tr { cursor:pointer; }
+tbody tr:hover td { background:#F7FAFD; }
+tr.sel td { background:#F1F6FC; }
+tr.sel td:first-child { box-shadow:inset 3px 0 0 var(--ibk); }
+.rank { display:inline-flex; width:22px; height:22px; border-radius:4px; background:var(--ibk); color:#fff; font-size:12px; font-weight:700;
+  align-items:center; justify-content:center; margin-right:10px; }
+.bb { display:grid; grid-template-columns:1fr 64px; align-items:center; gap:10px; }
+.bb .t { height:14px; } .bb .t i { display:block; height:100%; background:var(--burden); border-radius:2px; }
+tr.sum td { height:44px; color:var(--sub); font-size:14px; border-bottom:0; cursor:default; }
+tr.sum:hover td { background:none; }
+.tfoot { display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding-top:8px; }
+
+/* ② 고객군 · 상담 */
+#v2 { grid-template-columns:1.05fr 1fr; gap:14px; }
+#v2 > .card { padding:20px 24px; }
+.picker { display:inline-flex; align-items:center; gap:10px; border:1px solid #C9CFD8; border-radius:6px; padding:6px 12px; font-size:19px; font-weight:700; }
+.kpis { display:grid; grid-template-columns:1fr 1fr 1.2fr; margin-top:14px; border:1px solid var(--line); border-radius:6px; }
+.kpis > div { padding:14px 16px; } .kpis > div + div { border-left:1px solid var(--line); }
+.kv { font-size:30px; font-weight:700; letter-spacing:-0.03em; margin-top:2px; }
+.kv.o { color:var(--burden); font-size:38px; }
+.ph { height:150px; border:1.5px dashed #CBD2DB; border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--faint); font-size:14px; margin-top:8px; background:#FAFBFC; }
+.feat { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:10px; }
+.feat div { background:#F6F7F9; border-radius:6px; padding:10px 12px; font-size:13.5px; color:var(--sub); }
+.feat b { display:block; font-size:20px; color:var(--text); margin-top:2px; }
+.rail { display:flex; gap:10px; align-items:center; background:#EEF4FB; border:1px solid #CFE0F3; border-radius:6px; padding:10px 14px; font-size:14px; color:#123E6E; }
+.rail i { font-style:normal; display:inline-flex; width:20px; height:20px; border-radius:50%; background:var(--ibk); color:#fff; font-size:12px; font-weight:700; align-items:center; justify-content:center; flex:none; }
+.step { margin-top:14px; }
+.stt { display:flex; align-items:center; gap:8px; font-size:15px; font-weight:600; margin-bottom:6px; }
+.stt .n { font-size:12px; font-weight:700; color:var(--ibk); background:var(--ibk-soft); border-radius:3px; padding:1px 6px; }
+.stt .link { margin-left:auto; font-size:13.5px; }
+.chk { display:grid; grid-template-columns:1fr 1fr; gap:4px 14px; font-size:14px; }
+.chk label { display:flex; gap:6px; align-items:center; cursor:pointer; }
+.quote { background:#F4F8FD; border-left:3px solid var(--ibk); padding:11px 14px; font-size:15px; line-height:1.65; border-radius:0 6px 6px 0; }
+.qa details { border-bottom:1px solid var(--line); padding:8px 2px; font-size:14px; }
+.qa details:first-child { border-top:1px solid var(--line); }
+.qa summary { cursor:pointer; }
+.qa p { color:var(--sub); font-size:13.5px; line-height:1.55; margin-top:4px; }
+.order { display:grid; grid-template-columns:1fr 24px 1fr; }
+.order > div:not(.arr) { border:1px solid var(--line); border-radius:6px; padding:10px 12px; font-size:13.5px; line-height:1.6; }
+.order .k { font-size:12.5px; font-weight:700; color:var(--ibk); display:block; margin-bottom:2px; }
+.order .later { background:#FAFAFB; } .order .later .k { color:var(--sub); }
+.arr { display:flex; align-items:center; justify-content:center; color:var(--faint); }
+
+/* ③ 근거 */
+#v3 { grid-template-rows:auto 1fr auto; gap:14px; }
+#v3 .card { padding:16px 22px; }
+.lead { display:flex; align-items:center; gap:24px; }
+.lead .big { font-size:19px; font-weight:600; line-height:1.5; flex:1; }
+.lead .big em { font-style:normal; color:var(--ibk); }
+.mid3 { display:grid; grid-template-columns:1.3fr 1fr; gap:14px; min-height:0; }
+.right3 { display:grid; grid-template-rows:232px 1fr; gap:14px; min-height:0; }
+.legend { display:flex; gap:14px; font-size:13px; color:var(--sub); }
+.legend i { display:inline-block; width:11px; height:11px; margin-right:5px; vertical-align:-1px; border-radius:2px; }
+.cmp3 td { height:31px; font-size:14px; } .cmp3 th { padding:6px 10px; }
+.layers { display:grid; grid-template-columns:1fr 1fr 1fr 1.15fr; padding:0 !important; }
+.layers > div { padding:12px 18px; font-size:13.5px; line-height:1.55; color:var(--sub); }
+.layers > div + div { border-left:1px solid var(--line); }
+.layers b { display:block; font-size:15px; color:var(--text); margin-bottom:2px; }
+.ok { display:inline-block; font-size:11.5px; font-weight:700; color:#fff; background:var(--ibk); border-radius:3px; padding:1px 6px; margin-left:4px; vertical-align:1px; }
+.ok.g { background:#9AA3AE; }
+.dirrow { display:grid; grid-template-columns:110px 1fr 90px; align-items:center; gap:10px; font-size:14px; margin-top:8px; }
+.dirrow .t { height:12px; background:#EEF1F5; border-radius:6px; overflow:hidden; } .dirrow .t i { display:block; height:100%; background:#8D98A6; border-radius:6px; }
+.foot { position:absolute; left:24px; right:24px; bottom:4px; font-size:11.5px; color:var(--faint); display:flex; justify-content:space-between; }
+</style></head>
+<body>
+<div id="app">
+  <div class="head">
+    <div class="prod">IBK 환율 세이프가드<small>먼저 점검할 외환 고객을 찾아 드립니다</small></div>
+    <div class="tabs" id="tabs">
+      <button class="tab on" data-v="v1">① 요약</button>
+      <button class="tab" data-v="v2">② 고객군 · 상담</button>
+      <button class="tab" data-v="v3">③ 근거</button>
+    </div>
+    <div class="ctrls">
+      <div class="ctl"><label>시장 기준일</label><select id="asof"></select></div>
+      <div class="sep"></div>
+      <div class="ctl"><label>관리부점</label><select class="cf" disabled><option>전체</option></select></div>
+      <div class="ctl"><label>업종</label><select class="cf" disabled><option>전체</option></select></div>
+      <div class="ctl"><label>결제 통화</label><select class="cf" disabled><option>전체</option></select></div>
+      <div class="ctl"><label>고객 유형</label><select class="cf" disabled><option>전체</option></select></div>
+      <button class="reset" id="reset">초기화</button>
+    </div>
+  </div>
+  <div class="basis" id="basis"></div>
+
+  <!-- ① 요약 -->
+  <div class="view on" id="v1">
+    <div class="card hero">
+      <div id="h-status"></div>
+      <div id="h-prob"></div>
+      <div id="h-cust"></div>
+    </div>
+    <div class="card tbl" id="t-top"></div>
+  </div>
+
+  <!-- ② 고객군 · 상담 -->
+  <div class="view" id="v2">
+    <div class="card" id="c-left"></div>
+    <div class="card" id="c-right"></div>
+  </div>
+
+  <!-- ③ 근거 -->
+  <div class="view" id="v3">
+    <div class="card lead" id="e-lead"></div>
+    <div class="mid3">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end">
+          <div><div class="h2">경고등별 — 두 기간 모두 통했나요?</div><div class="h2s">켜졌던 때 1주일 뒤 ±1% 넘게 달라진 비율 · 점선 = 그 기간의 전체 평균</div></div>
+          <span class="legend"><span><i style="background:#B9C1CC"></i>2011~2019년 · 규칙을 정함</span><span><i style="background:var(--ibk)"></i>2020년 이후 · 다시 확인</span></span>
+        </div>
+        <div id="ch-sig" style="height:372px"></div>
+      </div>
+      <div class="right3">
+        <div class="card"><div class="h2">경고등이 많을수록 더 자주 크게 움직였습니다</div><div class="h2s">켜진 경고등 수별 · 두 기간</div><div id="ch-steps" style="height:160px"></div></div>
+        <div class="card" id="e-cmp"></div>
+      </div>
+    </div>
+    <div class="card layers" id="e-layers"></div>
+  </div>
+  <div class="foot"><span id="foot-l"></span><span id="foot-r"></span></div>
+  <div id="tip"></div>
+</div>
+<script>__ECHARTS__</script>
+<script>var EXT = __EXTERNAL__; var INT_RAW = __INTERNAL__; var BUILT = "__BUILT__";</script>
+<script>__MARKET_JS__</script>
+<script>__APP_JS__</script>
+</body></html>
